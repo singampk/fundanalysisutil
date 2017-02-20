@@ -13,6 +13,6 @@ Instructions to run fundanalysisutil
 *  For changing the outperformed, underperformed values, please use the following properties from the outperformance.properties, for example for a value 2 and -2
                     upperNLowerLimits=-2,2
                     -2=underperformed
-                    2=outperformed
+                     2=outperformed
 
 
