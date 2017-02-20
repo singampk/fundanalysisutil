@@ -4,6 +4,9 @@ import au.com.lonsec.singampk.fundutil.model.IndexKey;
 import au.com.lonsec.singampk.fundutil.model.OutPerformanceObject;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.test.context.ContextConfiguration;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -18,15 +21,17 @@ import static org.junit.Assert.assertEquals;
  *
  * Created by ksingamp on 19/02/2017.
  */
-
+@ContextConfiguration("classpath:applicationContext.xml")
 public class SortUtilsTest {
 
     static Map<IndexKey,OutPerformanceObject>  outPerformanceObjectMap = null;
 
+    static ConfigurableApplicationContext context = null;
+
     //Loading required objects
     @BeforeClass
     public static void loadMapAndContext(){
-
+        context = new ClassPathXmlApplicationContext("applicationContext.xml");
         outPerformanceObjectMap = new HashMap<>();
         outPerformanceObjectMap.put(new IndexKey("Fund1", LocalDate.now()),new OutPerformanceObject("Fund Name1", LocalDate.now(),0.332f,"",1.1323f,2,new IndexKey("Fund1", LocalDate.now())));
         outPerformanceObjectMap.put(new IndexKey("Fund2", LocalDate.now()),new OutPerformanceObject("Fund Name2", LocalDate.now(),1.332f,"",0.1323f,2,new IndexKey("Fund2", LocalDate.now())));
@@ -49,12 +54,12 @@ public class SortUtilsTest {
     public void convertSortedListToStringTest(){
         List<String> sortedList = SortUtils.sortMapBasedOnValues(outPerformanceObjectMap);
         //Highest eligible value
-        assertEquals(sortedList.get(0),"Fund Name3,20/02/2017,2.33,,2.13,1");
+        assertEquals(sortedList.get(1),"Fund Name3,20/02/2017,2.33,,2.13,1");
         //Start of second sequence
-        assertEquals(sortedList.get(5),"Fund Name2,21/04/2016,4.33,,2.13,1");
+        assertEquals(sortedList.get(6),"Fund Name2,21/04/2016,4.33,,2.13,1");
         //End of second sequence
-        assertEquals(sortedList.get(9),"Fund Name3,21/04/2016,-2.33,,5.13,5");
+        assertEquals(sortedList.get(10),"Fund Name3,21/04/2016,-2.33,,5.13,5");
         //Least eligible value
-        assertEquals(sortedList.get(14),"Fund Name5,21/02/2016,-2.33,,2.13,5");
+        assertEquals(sortedList.get(15),"Fund Name5,21/02/2016,-2.33,,2.13,5");
     }
 }
